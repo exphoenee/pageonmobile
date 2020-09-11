@@ -1,0 +1,19 @@
+.grid-item {
+  background-color: white;
+}
+.grid-item.black {
+  background-color: black;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.grid-item {
+}
+
+.pagepreview {
+  display: block;
+  width: 100%;
+}
