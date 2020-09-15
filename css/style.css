@@ -1,19 +1,40 @@
-.grid-item {
-  background-color: white;
-}
-.grid-item.black {
+.black {
   background-color: black;
-}
-
-.grid-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-}
-
-.grid-item {
 }
 
 .pagepreview {
   display: block;
   width: 100%;
+}
+
+.referene-collection {
+  width: 800px;
+  height: 800px;
+}
+
+.computer {
+  width: 100%;
+  position: relative;
+}
+.notebook {
+  width: 65%;
+  bottom: 50%;
+  right: -50%;
+  position: relative;
+}
+.tablet {
+  width: 27%;
+  bottom: 93%;
+  left: 10%;
+  position: relative;
+}
+.phone {
+  width: 22%;
+  bottom: 113%;
+  position: relative;
+}
+
+.device-collection {
+  width: 800px;
+  height: 800px;
 }
