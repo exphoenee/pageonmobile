@@ -27,12 +27,10 @@ class devicePreview {
     this.device = parameters.device || "desktop";
     this.screenCoords = parameters.screenCoords;
     this.imageScrollPos = 0;
-    this.scrollSpeed = parameters.scrollSpeed;
+    this.scrollOverTime = parameters.scrollOverTime;
     this.forward = true;
     this.stopped = parameters.stopped || false;
     this.speedDivider = parameters.speedDivider || 3;
-    this.slowSpeed = parameters.scrollSpeed / this.speedDivider;
-    this.fullSpeed = parameters.scrollSpeed;
     this.folder = parameters.folder || "media/device/";
     this.slowDownOnHover = parameters.speedDownOnHover || true;
     this.stopOnClick = parameters.stopOnClick || true;
@@ -106,6 +104,12 @@ class devicePreview {
       self.imageHeight = self.imageScreen.naturalHeight;
       self.imageRatio = self.imageWidth / self.imageHeight;
       self.imageToScreen = self.screenWidth / self.imageWidth;
+      self.scrollSpeed =
+        (self.imageHeight - self.screenHeight) /
+        self.scrollOverTime /
+        self.canvasFPS;
+      self.slowScrollSpeed = self.scrollSpeed / self.speedDivider;
+      self.fullScrollSpeed = self.scrollSpeed;
     });
 
     this.imageDevice.src = this.config[this.device].imageDeviceSrc;
@@ -128,6 +132,7 @@ class devicePreview {
         this.reachedBottom = false;
         this.reachedTop = true;
       }
+
       if (!this.stopped) {
         this.forward
           ? (this.imageScrollPos += this.scrollSpeed)
@@ -161,20 +166,17 @@ class devicePreview {
   }
 
   slowDownOnHoverEffect() {
-    let self = this;
     if (this.slowDownOnHover) {
       this.canvas.addEventListener("mouseover", () => {
-        self.canvas.parentElement.classList.add("takeout");
         this.scrollSpeed == 0
           ? (this.scrollSpeed = 0)
-          : (this.scrollSpeed = this.slowSpeed);
+          : (this.scrollSpeed = this.slowScrollSpeed);
       });
 
       this.canvas.addEventListener("mouseleave", () => {
-        self.canvas.parentElement.classList.remove("takeout");
         this.scrollSpeed == 0
           ? (this.scrollSpeed = 0)
-          : (this.scrollSpeed = this.fullSpeed);
+          : (this.scrollSpeed = this.fullScrollSpeed);
       });
     }
   }
@@ -208,25 +210,25 @@ let devices = [
     canvasId: "preview-computer",
     device: "computer",
     onScreenImage: "media/onscreen/bvcv.jpg",
-    scrollSpeed: 5,
+    scrollOverTime: 5,
   },
   {
     canvasId: "preview-notebook",
     device: "notebook",
     onScreenImage: "media/onscreen/bvcv.jpg",
-    scrollSpeed: 5,
+    scrollOverTime: 5,
   },
   {
     canvasId: "preview-tablet",
     device: "tablet",
     onScreenImage: "media/onscreen/bvcv-tablet.png",
-    scrollSpeed: 5,
+    scrollOverTime: 5,
   },
   {
     canvasId: "preview-phone",
     device: "phone",
     onScreenImage: "media/onscreen/bvcv-mobile.png",
-    scrollSpeed: 5,
+    scrollOverTime: 5,
   },
 ];
 
@@ -252,8 +254,8 @@ class Preview {
     this.devices = {
       desktop: { dimensions: { width: "100%" } },
       notebook: { dimensions: { width: "65%", bottom: "50%", right: "-50%" } },
-      tablet: { dimensions: { width: "27%", bottom: "98%", left: "10%" } },
-      phone: { dimensions: { width: "22%", width: "22%", bottom: "117%" } },
+      tablet: { dimensions: { width: "27%", bottom: "93%", left: "10%" } },
+      phone: { dimensions: { width: "22%", width: "22%", bottom: "113%" } },
     };
 
     for (let device in this.devices) {
@@ -277,33 +279,13 @@ class Preview {
         canvasId: this.devices[device].canvas.id,
         device: device,
         onScreenImage: parameters.screenImage[device],
-        scrollSpeed: parameters.scrollSpeed || 5,
+        scrollOverTime: parameters.scrollOverTime || 5,
       };
 
       this.devices[device].devicePreview = new devicePreview(
         this.devices[device].deviceConfig
       );
-
       this.devices[device].devicePreview.init();
-    }
-
-    for (let device in this.devices) {
-      this.devices[device].classObserver = new MutationObserver(() => {
-        if (this.devices[device].dom.classList.contains("takeout")) {
-          for (let otherdevice in this.devices) {
-            if (device !== otherdevice) {
-              this.devices[otherdevice].dom.classList.add(device + "-takedout");
-            }
-          }
-        } /* else {
-          console.log(this.devices[device].dom.classList);
-          this.devices[device].dom.classList.remove(device + "-takedout");
-        }*/
-      });
-
-      this.devices[device].classObserver.observe(this.devices[device].dom, {
-        attributes: true,
-      });
     }
   }
 }
@@ -316,5 +298,5 @@ let myPreview = new Preview({
     tablet: "media/onscreen/bvcv-tablet.png",
     phone: "media/onscreen/bvcv-mobile.png",
   },
-  scrollSpeed: 5,
+  scrollOverTime: 10,
 });

@@ -8,8 +8,10 @@
 }
 
 .referene-collection {
-  width: 800px;
-  height: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 600px;
+  height: 600px;
 }
 
 .computer {
@@ -37,4 +39,137 @@
 .device-collection {
   width: 800px;
   height: 800px;
+}
+
+.notebook,
+.computer,
+.tablet,
+.phone {
+  transition: all 0.5s linear;
+}
+
+.computer:hover {
+  z-index: 1000;
+  position: relative;
+  animation: takeoutComputer 1s linear;
+  transform: translateY(7%) scale(1.2);
+}
+.computer:hover ~ .notebook {
+  transform: translateX(4%);
+  opacity: 0.4;
+}
+.computer:hover ~ .tablet {
+  transform: translateX(-4%);
+  opacity: 0.4;
+}
+.computer:hover ~ .phone {
+  transform: translateX(-10%);
+  opacity: 0.4;
+}
+@keyframes takeoutComputer {
+  0% {
+    transform: translateY(0%) scale(1);
+  }
+  50% {
+    transform: translateY(3%) scale(1.02);
+  }
+  100% {
+    transform: translateY(7%) scale(1.2);
+  }
+}
+
+.notebook:hover {
+  z-index: 1000;
+  position: relative;
+  animation: takeoutNotebook 1s linear;
+  transform: translateX(-27%) scale(1.3);
+}
+
+.notebook:hover ~ .computer {
+  opacity: 0.4;
+}
+.notebook:hover ~ .tablet {
+  transform: translateX(-18%);
+  opacity: 0.4;
+}
+.notebook:hover ~ .phone {
+  transform: translateX(-33%);
+  opacity: 0.4;
+}
+@keyframes takeoutNotebook {
+  0% {
+    transform: translateY(0%) scale(1);
+  }
+  50% {
+    transform: translatex(-14%) scale(1.02);
+  }
+  100% {
+    transform: translateX(-27%) scale(1.3);
+  }
+}
+
+.tablet:hover {
+  z-index: 1000;
+  position: relative;
+  animation: takeoutTablet 1s linear;
+  transform: translateX(97%) translateY(-57%) scale(2.5);
+}
+
+.tablet:hover ~ .computer {
+  opacity: 0.4;
+}
+.tablet:hover ~ .notebook {
+  transform: translateX(-18%);
+  opacity: 0.4;
+}
+.tablet:hover ~ .phone {
+  transform: translateX(-33%);
+  opacity: 0.4;
+}
+@keyframes takeoutTablet {
+  0% {
+    transform: translateY(0%) scale(1);
+  }
+  50% {
+    transform: translatex(34%) translateY(-22%) scale(1.3);
+  }
+  100% {
+    transform: translateX(97%) translateY(-57%) scale(2.5);
+  }
+}
+
+.phone:hover {
+  z-index: 1000;
+  position: relative;
+  animation: takeoutPhone 1s linear;
+  transform: translateX(157%) translateY(-127%) scale(3.5);
+}
+
+.phone:hover ~ .computer {
+  opacity: 0.4;
+}
+.phone:hover ~ .notebook {
+  transform: translateX(-18%);
+  opacity: 0.4;
+}
+.phone:hover ~ .tablet {
+  transform: translateX(-33%);
+  opacity: 0.4;
+}
+@keyframes takeoutPhone {
+  0% {
+    transform: translateY(0%) scale(1);
+  }
+  50% {
+    transform: translatex(64%) translateY(-32%) scale(1.3);
+  }
+  100% {
+    transform: translateX(157%) translateY(-127%) scale(3.5);
+  }
+}
+
+/***************************************************************************/
+#myPreview,
+.device-collection {
+  margin: 0px auto;
 }
