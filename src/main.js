@@ -13,16 +13,18 @@ A screenImage egy objektum, ami a lehetséges számítógépekre rajzolandó ké
 *******************************************************************/
 class Preview {
   constructor(parameters) {
-    this.container = document.getElementById(parameters.containerId);
-    this.deviceCollection = document.createElement("div");
-    this.container.appendChild(this.deviceCollection);
+    this.deviceCollection = document.getElementById(parameters.containerId);
     this.deviceCollection.className = "device-collection";
-    this.deviceCollection.style.height = this.deviceCollection.offsetWidth;
+    this.deviceCollection.style.position = "relative";
+    this.deviceCollection.style.perspective = "800px";
+    this.deviceCollection.style.transformStyle = "preserve-3d";
+    this.deviceCollection.style.height = "100%";
     this.folder = parameters.folder || "media/device/";
     this.canvasFPS = 1000 / 60;
     this.slowDownOnHover = parameters.speedDownOnHover || true;
     this.stopOnClick = parameters.stopOnClick || true;
     this.speedDivider = parameters.speedDivider || 3;
+    this.direction = parameters.direction || "right";
 
     this.devices = {
       desktop: {
@@ -40,8 +42,6 @@ class Preview {
       notebook: {
         dimensions: {
           width: "65%",
-          bottom: "50%",
-          right: "-50%",
         },
         imageDeviceSrc: this.folder + "notebook-bk.png",
         screenCoords: {
@@ -52,7 +52,9 @@ class Preview {
         },
       },
       tablet: {
-        dimensions: { width: "27%", bottom: "98%", left: "10%" },
+        dimensions: {
+          width: "27%",
+        },
         imageDeviceSrc: this.folder + "tablet-bk.png",
         screenCoords: {
           topX: 180,
@@ -62,7 +64,9 @@ class Preview {
         },
       },
       phone: {
-        dimensions: { width: "22%", width: "22%", bottom: "117%" },
+        dimensions: {
+          width: "22%",
+        },
         imageDeviceSrc: this.folder + "phone-bk.png",
         screenCoords: {
           topX: 575,
@@ -74,55 +78,90 @@ class Preview {
     };
 
     this.deviceConfig = Object.getOwnPropertyNames(parameters.screenImage);
+    let reverse =
+      this.direction === "left"
+        ? "+5deg"
+        : this.direction === "right"
+        ? "-5deg"
+        : "";
+    console.log(this.direction, reverse);
+    this.devices.desktop.dimensions.width = "90%";
+    this.devices.desktop.dimensions.bottom = "15%";
+    this.devices.desktop.dimensions.left = "10%";
+    this.devices.desktop.dimensions.transform =
+      "rotateY(" + reverse + ") translateZ(0px)";
+    /**/
+    this.devices.notebook.dimensions.width = "60%";
+    this.devices.notebook.dimensions.bottom = "0%";
+    this.devices.notebook.dimensions.left = "0%";
+    this.devices.notebook.dimensions.transform =
+      "rotateY(" + reverse + ") translateZ(40px)";
+    /**/
+    this.devices.tablet.dimensions.bottom = "10%";
+    this.devices.tablet.dimensions.right = "8%";
+    this.devices.tablet.dimensions.transform =
+      "rotateY(" + reverse + ") rotateX(3deg) translateZ(50px)";
+    /**/
+    this.devices.phone.dimensions.bottom = "9%";
+    this.devices.phone.dimensions.right = "0%";
+    this.devices.phone.dimensions.transform =
+      "rotateY(" + reverse + ") rotateX(3deg) translateZ(70px)";
     if (!this.deviceConfig.includes("desktop")) {
-      this.devices.notebook.dimensions.bottom = "-20%";
-      this.devices.notebook.dimensions.right = "-20%";
-      this.devices.tablet.dimensions.bottom = "20%";
-      this.devices.phone.dimensions.bottom = "43%";
-      this.devices.phone.dimensions.right = "-70%";
+      this.devices.notebook.dimensions.width = "90%";
+      this.devices.notebook.dimensions.bottom = "0%";
+      this.devices.notebook.dimensions.left = "0%";
+      /**/
+      this.devices.tablet.dimensions.bottom = "10%";
+      this.devices.tablet.dimensions.right = "6%";
+      /**/
+      this.devices.phone.dimensions.bottom = "5%";
+      this.devices.phone.dimensions.right = "0%";
     }
     if (!this.deviceConfig.includes("notebook")) {
-      this.devices.tablet.dimensions.bottom = "35%";
-      this.devices.tablet.dimensions.left = "30%";
-      this.devices.phone.dimensions.bottom = "57%";
-      this.devices.phone.dimensions.right = "-46%";
+      this.devices.tablet.dimensions.bottom = "13%";
+      this.devices.tablet.dimensions.left = "8%";
+      /**/
+      this.devices.phone.dimensions.bottom = "12%";
+      this.devices.phone.dimensions.left = "25%";
     }
     if (!this.deviceConfig.includes("tablet")) {
-      this.devices.phone.dimensions.bottom = "87%";
-      this.devices.phone.dimensions.right = "-36%";
+      this.devices.phone.dimensions.bottom = "12%";
+      this.devices.phone.dimensions.left = "75%";
+    }
+    if (!this.deviceConfig.includes("phone")) {
+      this.devices.tablet.dimensions.bottom = "11%";
+      this.devices.tablet.dimensions.right = "0%";
     }
     if (
       !this.deviceConfig.includes("desktop") &&
       !this.deviceConfig.includes("notebook")
     ) {
-      this.devices.tablet.dimensions.bottom = "-40%";
-      this.devices.tablet.dimensions.left = "40%";
-      this.devices.phone.dimensions.bottom = "-20%";
-      this.devices.phone.dimensions.right = "-30%";
+      this.devices.tablet.dimensions.width = "70%";
+      this.devices.tablet.dimensions.bottom = "5%";
+      this.devices.tablet.dimensions.left = "34%";
+      /**/
+      this.devices.phone.dimensions.width = "70%";
+      this.devices.phone.dimensions.bottom = "0%";
+      this.devices.phone.dimensions.left = "0%";
     }
     if (
       !this.deviceConfig.includes("desktop") &&
       !this.deviceConfig.includes("notebook") &&
       !this.deviceConfig.includes("tablet")
     ) {
-      this.devices.phone.dimensions.bottom = "-50%";
-      this.devices.phone.dimensions.right = "-40%";
+      this.devices.phone.dimensions.width = "90%";
+      this.devices.phone.dimensions.bottom = "0%";
+      this.devices.phone.dimensions.left = "0%";
     }
     if (
       !this.deviceConfig.includes("notebook") &&
       !this.deviceConfig.includes("tablet")
     ) {
-      this.devices.phone.dimensions.bottom = "25%";
-      this.devices.phone.dimensions.right = "-35%";
     }
     if (
       !this.deviceConfig.includes("desktop") &&
       !this.deviceConfig.includes("tablet")
     ) {
-      this.devices.notebook.dimensions.bottom = "-20%";
-      this.devices.notebook.dimensions.right = "-20%";
-      this.devices.phone.dimensions.bottom = "10%";
-      this.devices.phone.dimensions.right = "-15%";
     }
 
     for (let device in parameters.screenImage) {
@@ -130,7 +169,7 @@ class Preview {
       this.deviceCollection.appendChild(this.devices[device].dom);
       this.devices[device].dom.className = "previewContainer";
       this.devices[device].dom.id = device + "-device";
-      this.devices[device].dom.style.position = "relative";
+      this.devices[device].dom.style.position = "absolute";
       this.devices[device].imageDevice = new Image();
       this.devices[device].imageScreen = new Image();
       this.devices[device].imageScrollPos = 0;
@@ -334,6 +373,7 @@ class Preview {
 
 let myPreview = new Preview({
   containerId: "myPreview",
+  direction: "right",
   screenImage: {
     desktop: "media/onscreen/bvcv.jpg",
     notebook: "media/onscreen/bvcv.jpg",
@@ -341,4 +381,5 @@ let myPreview = new Preview({
     phone: "media/onscreen/bvcv-mobile.png",
   },
   scrollSpeed: 5,
+  width: "1000px",
 });
