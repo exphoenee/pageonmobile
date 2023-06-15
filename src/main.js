@@ -8,8 +8,8 @@ colorchanger.addEventListener("click", () => {
 });
 
 /********************************************************************
-Ez az osztály egy teljes számízógépe egységet, köteget alkot. Neki csak egy már létező div id nevét kell megadni, és feltölti a szükséges HTML DOM elemekkel, amiknek a szükséges sztílusát is létrehozza, css-ben felül lehet írni ezeket.
-A screenImage egy objektum, ami a lehetséges számítógépekre rajzolandó képernyőképek src-jét tartalmazz, ezenkívűl a paraméterek között meg lehet adni a scrollozási sebességet is.
+Ez az osztály egy teljes számítógép egységet, köteget alkot. Neki csak egy már létező div id nevét kell megadni, és feltölti a szükséges HTML DOM elemekkel, amiknek a szükséges stílusát is létrehozza, CSS-ben felül lehet írni ezeket.
+A screenImage egy objektum, ami a lehetséges számítógépekre rajzolandó képernyőképek src-jét tartalmazza. Ezenkívül a paraméterek között meg lehet adni a scrollozási sebességet is.
 *******************************************************************/
 class Preview {
   constructor(parameters) {
