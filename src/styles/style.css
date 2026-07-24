@@ -1,3 +1,6 @@
+/* Demo page chrome. The widget's own styles live in preview.css. */
+@import './preview.css';
+
 :root {
   --bg: #f6f7fb;
   --surface: #ffffff;
