@@ -1,0 +1,24 @@
+{
+  "name": "pageonmobile",
+  "version": "1.0.0",
+  "description": "Render website screenshots into device mockups (desktop, notebook, tablet, phone) on a canvas with auto-scroll animation.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "format": "prettier --write \"**/*.{ts,css,html,json,md}\""
+  },
+  "keywords": ["device-mockup", "canvas", "preview", "responsive"],
+  "license": "MIT",
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.7.0",
+    "eslint-config-prettier": "^10.1.8",
+    "prettier": "^3.9.6",
+    "typescript": "^7.0.2",
+    "vite": "^8.1.5"
+  }
+}
