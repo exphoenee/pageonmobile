@@ -115,34 +115,42 @@ moved from JS string concatenation into CSS.
 
 The package builds to `lib/` and ships only `lib/` + the WebP frames (see the
 `files` field). Declarations and the library bundle are produced automatically
-by the `prepublishOnly` hook, so you don't have to build by hand.
+by the `prepublishOnly` hook, so you never build by hand.
+
+> **`npm publish` does not bump the version.** npm refuses to overwrite an
+> already-published version (`E403`), so each release needs a new version
+> number. Use the `release` scripts below to bump + publish in one step.
+
+**First publish** (version `1.0.0`, name still free — no bump needed):
 
 ```bash
-# 1. Log in once (opens a browser for npmjs.com)
-npm login
-
-# 2. Make sure the name is free / you own it
-npm view pageonmobile version   # 404 = available
-
-# 3. Bump the version (commit + git tag)
-npm version patch               # or: minor / major
-
-# 4. Preview exactly what will be published
-npm publish --dry-run
-
-# 5. Publish (public registry)
+npm login                     # once; opens a browser for npmjs.com
+npm publish --dry-run         # preview the tarball (nothing uploaded)
 npm publish --access public
 ```
 
+**Every release after that** — auto-bumps, publishes and pushes the git tag:
+
+```bash
+npm run release          # patch: 1.0.0 -> 1.0.1
+npm run release:minor    # minor: 1.0.1 -> 1.1.0
+npm run release:major    # major: 1.1.0 -> 2.0.0
+```
+
+Each `release` script runs `npm version <type>` (bumps `package.json`, commits
+and creates a git tag), then `npm publish --access public`, then
+`git push --follow-tags`.
+
 Notes:
 
-- If `pageonmobile` is already taken on npm, publish under a scope you own —
-  set `"name": "@exphoenee/pageonmobile"` in `package.json` (scoped packages
-  still need `--access public` to be free/public).
+- `npm version` **requires a clean git working tree** — commit your changes
+  first, then run a `release` script.
+- If `pageonmobile` is ever taken by someone else, publish under a scope you
+  own: set `"name": "@exphoenee/pageonmobile"` (scoped packages still need
+  `--access public` to be free/public).
 - `prepublishOnly` runs `npm run build:lib`; verify `npm publish --dry-run`
-  lists `lib/*` and `media/device/*.webp` and nothing else.
-- Consumers install with `npm install pageonmobile` and use it as shown in
-  [Usage](#usage-as-a-package).
+  lists `lib/*` and `media/device/*-bk.webp` and nothing else.
+- If 2FA is on your npm account, add `--otp=<code>` to the publish command.
 
 ## License
 

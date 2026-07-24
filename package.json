@@ -43,7 +43,10 @@
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
-    "format": "prettier --write \"**/*.{ts,css,html,json,md}\""
+    "format": "prettier --write \"**/*.{ts,css,html,json,md}\"",
+    "release": "npm version patch && npm publish --access public && git push --follow-tags",
+    "release:minor": "npm version minor && npm publish --access public && git push --follow-tags",
+    "release:major": "npm version major && npm publish --access public && git push --follow-tags"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
