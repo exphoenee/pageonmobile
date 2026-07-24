@@ -1,20 +1,191 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link rel="stylesheet" href="css/style.css" />
+    <title>Page on Mobile — device preview</title>
+    <meta
+      name="description"
+      content="Page on Mobile renders website screenshots into desktop, notebook, tablet and phone mockups on a canvas, auto-scrolling each one so you can preview how a page looks across devices."
+    />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Page on Mobile — device preview" />
+    <meta
+      property="og:description"
+      content="Auto-scrolling desktop, notebook, tablet and phone mockups on canvas. Preview how any site looks across devices."
+    />
+    <meta
+      property="og:url"
+      content="https://exphoenee.github.io/pageonmobile/"
+    />
+    <meta
+      property="og:image"
+      content="https://exphoenee.github.io/pageonmobile/og-image.png"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Page on Mobile — device preview" />
+    <meta
+      name="twitter:description"
+      content="Auto-scrolling desktop, notebook, tablet and phone mockups on canvas."
+    />
+    <meta
+      name="twitter:image"
+      content="https://exphoenee.github.io/pageonmobile/og-image.png"
+    />
   </head>
   <body>
-    <header>
-      <div><button class="changecolor">changecolor</button></div>
+    <header class="site-header">
+      <a class="brand" href="/">
+        <span class="brand__dot"></span>
+        Page<span class="brand__accent">on</span>Mobile
+      </a>
+      <nav class="site-nav">
+        <button class="btn btn--ghost" type="button" data-open-docs>
+          Documentation
+        </button>
+        <button class="btn btn--ghost changecolor" type="button">
+          <span class="btn__icon" aria-hidden="true">◐</span>
+          Toggle theme
+        </button>
+      </nav>
     </header>
+
     <main>
-      <div style="width: 50%; height: 600px">
+      <div class="stage">
         <div id="myPreview"></div>
       </div>
     </main>
+
+    <footer class="site-footer">
+      <span class="site-footer__copy"
+        >Copyright <span data-copyright-years>2020</span> Viktor Bozzay</span
+      >
+      <a
+        class="btn btn--primary"
+        href="https://viktor.bozzay.online"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Meet the creator
+        <span class="btn__icon" aria-hidden="true">↗</span>
+      </a>
+    </footer>
+
+    <dialog class="docs" id="docs">
+      <article class="docs__body">
+        <header class="docs__head">
+          <h2>How to use Page on Mobile</h2>
+          <button
+            class="btn btn--ghost docs__close"
+            type="button"
+            data-close-docs
+            aria-label="Close documentation"
+          >
+            ✕
+          </button>
+        </header>
+
+        <p>
+          <strong>Page on Mobile</strong> renders website screenshots into
+          device mockups (desktop, notebook, tablet, phone) on a
+          <code>&lt;canvas&gt;</code> and auto-scrolls each screenshot so you
+          can preview how a page looks across devices.
+        </p>
+
+        <p class="docs__live">
+          🌐 Live on GitHub Pages:
+          <a
+            href="https://exphoenee.github.io/pageonmobile/"
+            target="_blank"
+            rel="noopener noreferrer"
+            >exphoenee.github.io/pageonmobile</a
+          >
+        </p>
+
+        <h3>1. Install</h3>
+        <pre><code>npm install pageonmobile</code></pre>
+
+        <h3>2. Add a container</h3>
+        <pre><code>&lt;div id="myPreview" style="width: 900px; aspect-ratio: 16/15"&gt;&lt;/div&gt;</code></pre>
+
+        <h3>3. Create a preview</h3>
+        <pre><code>import { Preview } from 'pageonmobile';
+import 'pageonmobile/style.css';
+
+const preview = new Preview({
+  containerId: 'myPreview',        // id of the element above
+  direction: 'right',             // 'left' | 'right' | 'none'
+  scrollSpeed: 300,               // pixels per second
+  deviceFolder: '/device-frames/', // where the frame .webp files are hosted
+  screenImage: {
+    desktop:  '/shots/home.webp',  // YOUR screenshots — any URL
+    notebook: '/shots/home.webp',
+    tablet:   '/shots/home-tablet.webp',
+    phone:    '/shots/home-mobile.webp',
+  },
+});</code></pre>
+        <p class="docs__hint">
+          Only the devices you list in <code>screenImage</code> are rendered —
+          the layout adapts to whichever subset is present. The four device
+          frames ship with the package in
+          <code>node_modules/pageonmobile/media/device/</code>; copy them to a
+          public URL and point <code>deviceFolder</code> at it.
+        </p>
+
+        <h3>4. Control it at runtime</h3>
+        <pre><code>preview.pause();                       // pause all devices
+preview.setScreenshot('/shots/pricing.webp', 'phone');
+preview.destroy();                     // stop &amp; clean up</code></pre>
+
+        <h3>Interaction</h3>
+        <ul>
+          <li>Hover a device to bring it forward and slow the scroll.</li>
+          <li>Click a device to pause / resume its scroll.</li>
+        </ul>
+
+        <h3>Options</h3>
+        <table class="docs__table">
+          <tbody>
+            <tr>
+              <td><code>containerId</code></td>
+              <td>Id of an existing element to fill. Required.</td>
+            </tr>
+            <tr>
+              <td><code>screenImage</code></td>
+              <td>Map of device → screenshot URL. Required.</td>
+            </tr>
+            <tr>
+              <td><code>scrollSpeed</code></td>
+              <td>Pixels per second. Default <code>300</code>.</td>
+            </tr>
+            <tr>
+              <td><code>direction</code></td>
+              <td>Tilt of the stack. Default <code>'right'</code>.</td>
+            </tr>
+            <tr>
+              <td><code>slowDownOnHover</code></td>
+              <td>Slow scroll on hover. Default <code>true</code>.</td>
+            </tr>
+            <tr>
+              <td><code>stopOnClick</code></td>
+              <td>Toggle pause on click. Default <code>true</code>.</td>
+            </tr>
+            <tr>
+              <td><code>speedDivider</code></td>
+              <td>Hover slow-down factor. Default <code>3</code>.</td>
+            </tr>
+          </tbody>
+        </table>
+      </article>
+    </dialog>
+
+    <script type="module" src="/src/main.ts"></script>
   </body>
-  <script src="src/main.js"></script>
 </html>
