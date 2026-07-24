@@ -1,4 +1,6 @@
 node_modules/
 dist/
+lib/
+*.tgz
 *.local
 .DS_Store

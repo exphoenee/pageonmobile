@@ -6,10 +6,10 @@ const preview = new Preview({
   containerId: 'myPreview',
   direction: 'right',
   screenImage: {
-    desktop: 'media/onscreen/bvcv.jpg',
-    notebook: 'media/onscreen/bvcv.jpg',
-    tablet: 'media/onscreen/bvcv-tablet.png',
-    phone: 'media/onscreen/bvcv-mobile.png',
+    desktop: 'media/onscreen/bvcv.webp',
+    notebook: 'media/onscreen/bvcv.webp',
+    tablet: 'media/onscreen/bvcv-tablet.webp',
+    phone: 'media/onscreen/bvcv-mobile.webp',
   },
   scrollSpeed: 300,
 });

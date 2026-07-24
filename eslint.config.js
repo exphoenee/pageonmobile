@@ -6,7 +6,7 @@ import prettier from 'eslint-config-prettier';
 // type/correctness gate meanwhile; re-add @typescript-eslint once it ships
 // TS 7 support. ESLint here lints the JS tooling files only.
 export default [
-  { ignores: ['dist/**', 'node_modules/**', '**/*.ts'] },
+  { ignores: ['dist/**', 'lib/**', 'node_modules/**', '**/*.ts'] },
   js.configs.recommended,
   prettier,
 ];

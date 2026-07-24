@@ -5,23 +5,23 @@ import type { DeviceConfig, DeviceKind } from '../types';
  * (Previously duplicated between obj.js and main.js.)
  *
  * `imageDeviceSrc` is relative to `PreviewOptions.deviceFolder`.
- * `screenCoords` are in the natural pixel space of each frame PNG.
+ * `screenCoords` are in the natural pixel space of each frame image.
  */
 export const DEVICE_CONFIGS: Record<DeviceKind, DeviceConfig> = {
   desktop: {
-    imageDeviceSrc: 'computer-bk.png',
+    imageDeviceSrc: 'computer-bk.webp',
     screenCoords: { topX: 230, topY: 220, bottomX: 2170, bottomY: 1330 },
   },
   notebook: {
-    imageDeviceSrc: 'notebook-bk.png',
+    imageDeviceSrc: 'notebook-bk.webp',
     screenCoords: { topX: 226, topY: 451, bottomX: 1776, bottomY: 1429 },
   },
   tablet: {
-    imageDeviceSrc: 'tablet-bk.png',
+    imageDeviceSrc: 'tablet-bk.webp',
     screenCoords: { topX: 180, topY: 150, bottomX: 1028, bottomY: 1275 },
   },
   phone: {
-    imageDeviceSrc: 'phone-bk.png',
+    imageDeviceSrc: 'phone-bk.webp',
     screenCoords: { topX: 575, topY: 255, bottomX: 1420, bottomY: 1750 },
   },
 };

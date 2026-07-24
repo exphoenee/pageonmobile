@@ -3,16 +3,48 @@
   "version": "1.0.0",
   "description": "Render website screenshots into device mockups (desktop, notebook, tablet, phone) on a canvas with auto-scroll animation.",
   "type": "module",
+  "author": "Viktor Bozzay (https://viktor.bozzay.online)",
+  "homepage": "https://exphoenee.github.io/pageonmobile/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/exphoenee/pageonmobile.git"
+  },
+  "license": "MIT",
+  "keywords": [
+    "device-mockup",
+    "canvas",
+    "preview",
+    "responsive",
+    "mockup"
+  ],
+  "main": "./lib/pageonmobile.js",
+  "module": "./lib/pageonmobile.js",
+  "types": "./lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "import": "./lib/pageonmobile.js"
+    },
+    "./style.css": "./lib/pageonmobile.css",
+    "./media/*": "./media/*"
+  },
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "files": [
+    "lib",
+    "media/device/*-bk.webp"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
+    "build:lib": "vite build --config vite.lib.config.ts && tsc -p tsconfig.lib.json",
+    "prepublishOnly": "npm run build:lib",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "format": "prettier --write \"**/*.{ts,css,html,json,md}\""
   },
-  "keywords": ["device-mockup", "canvas", "preview", "responsive"],
-  "license": "MIT",
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "eslint": "^10.7.0",

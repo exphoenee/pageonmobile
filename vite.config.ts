@@ -12,7 +12,12 @@ function copyMedia(): Plugin {
     name: 'copy-media',
     apply: 'build',
     async closeBundle() {
-      await cp(resolve('media'), resolve('dist/media'), { recursive: true });
+      // Ship only the .webp assets the app actually uses (skip the heavy
+      // legacy PNG/JPG/PSD originals still kept in the repo).
+      await cp(resolve('media'), resolve('dist/media'), {
+        recursive: true,
+        filter: (src) => !/\.(png|jpe?g|psd)$/i.test(src),
+      });
     },
   };
 }

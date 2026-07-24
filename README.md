@@ -6,56 +6,87 @@ each screenshot to preview how a page looks across devices.
 
 **🌐 Live demo:** https://exphoenee.github.io/pageonmobile/
 
-## Stack
+- **TypeScript**, ships as an **ESM** package with type declarations.
+- **Zero runtime dependencies** — plain DOM + Canvas 2D.
+- Widget payload ~7 kB JS + 2 kB CSS; device frames are WebP (~250 kB total).
 
-- **TypeScript** + **Vite** (dev server, build)
-- **ESLint** + **Prettier**
-- No runtime dependencies — the widget is plain DOM + Canvas 2D.
-- Deployed to **GitHub Pages** at `exphoenee.github.io/pageonmobile/`
-  (Vite `base` is set to `/pageonmobile/` for that sub-path).
-
-## Getting started
+## Install
 
 ```bash
-npm install
-npm run dev        # Vite dev server with HMR
-npm run build      # typecheck + production build to dist/
-npm run preview    # serve the built output
-npm run lint
-npm run format
+npm install pageonmobile
 ```
 
-## Usage
+## Usage (as a package)
 
 ```ts
-import { Preview } from './src/core/Preview';
+import { Preview } from 'pageonmobile';
+import 'pageonmobile/style.css';
 
 const preview = new Preview({
-  containerId: 'myPreview',        // id of an existing element
-  direction: 'right',              // 'left' | 'right' | 'none'
-  scrollSpeed: 300,                // pixels per second (frame-rate independent)
+  containerId: 'myPreview', // id of an existing element on the page
+  direction: 'right', // 'left' | 'right' | 'none'
+  scrollSpeed: 300, // pixels per second (frame-rate independent)
+  deviceFolder: '/device-frames/', // where the frame images are hosted (see below)
   screenImage: {
-    desktop: 'media/onscreen/bvcv.jpg',
-    notebook: 'media/onscreen/bvcv.jpg',
-    tablet: 'media/onscreen/bvcv-tablet.png',
-    phone: 'media/onscreen/bvcv-mobile.png',
+    desktop: '/shots/home.webp', // YOUR screenshots — any URL
+    notebook: '/shots/home.webp',
+    tablet: '/shots/home-tablet.webp',
+    phone: '/shots/home-mobile.webp',
   },
 });
 
 // Runtime control
-preview.pause();                   // pause all devices
-preview.setScreenshot('media/onscreen/ktzs.png', 'phone');
-preview.destroy();                 // stop rAF loops + remove DOM/listeners
+preview.pause(); // pause all devices
+preview.setScreenshot('/shots/pricing.webp', 'phone');
+preview.destroy(); // stop the rAF loop + remove DOM/listeners
+```
+
+```html
+<div id="myPreview" style="width: 900px; aspect-ratio: 16/15"></div>
 ```
 
 Only the devices you list in `screenImage` are rendered; the layout adapts to
 the present subset via CSS (`data-devices` on the collection element).
 
+### Device frames
+
+The package ships the four **WebP** device frames in
+`node_modules/pageonmobile/media/device/`. They must be reachable by a URL at
+runtime, and `deviceFolder` must point at that URL (default `media/device/`):
+
+- **Static hosting** — copy them into your public folder and set
+  `deviceFolder` to that path:
+  ```bash
+  cp node_modules/pageonmobile/media/device/*.webp public/device-frames/
+  ```
+- **Bundlers (Vite/webpack)** — import them so the bundler emits hashed URLs,
+  or reference `pageonmobile/media/device/phone-bk.webp` via the package
+  `exports`.
+
+The screenshots in `screenImage` are entirely yours — provide any image URLs
+(WebP recommended for size).
+
+## Develop locally
+
+```bash
+npm install
+npm run dev        # Vite dev server with HMR (demo page)
+npm run build      # typecheck + build the demo to dist/ (GitHub Pages)
+npm run build:lib  # build the publishable package to lib/ (+ .d.ts)
+npm run preview    # serve the built demo
+npm run lint
+npm run format
+```
+
+Deployed to **GitHub Pages** at `exphoenee.github.io/pageonmobile/` via
+`.github/workflows/deploy.yml` (Vite `base` is `/pageonmobile/`).
+
 ## Project layout
 
 ```
 src/
-├── main.ts                  # demo entry point / wiring
+├── index.ts                 # package entry — public API + widget CSS
+├── main.ts                  # demo page entry / wiring (not shipped)
 ├── core/
 │   ├── Preview.ts           # orchestrates the device stack; lifecycle + public API
 │   ├── Device.ts            # one device: DOM, canvas, image loading, drawing, events
@@ -65,8 +96,11 @@ src/
 ├── types/
 │   └── index.ts             # shared types / the public options contract
 └── styles/
-    └── style.css            # layout & 3D positioning (was previously computed in JS)
-media/                       # device frames + screenshots (served at /media in dev & build)
+    ├── preview.css          # widget styles (shipped as pageonmobile/style.css)
+    └── style.css            # demo page chrome (imports preview.css)
+media/device/*.webp          # device frames (shipped in the package)
+lib/                          # built package output (npm run build:lib)
+dist/                         # built demo app (npm run build → GitHub Pages)
 ```
 
 ## Notes on the rewrite
@@ -76,6 +110,39 @@ way: `|| true` options that could never be disabled, animation starting before
 images loaded, leaked `setInterval` timers (now a single disposable rAF loop),
 a broken `changeImage`, and never-triggering hover slow-down. Device layout
 moved from JS string concatenation into CSS.
+
+## Publishing to npm
+
+The package builds to `lib/` and ships only `lib/` + the WebP frames (see the
+`files` field). Declarations and the library bundle are produced automatically
+by the `prepublishOnly` hook, so you don't have to build by hand.
+
+```bash
+# 1. Log in once (opens a browser for npmjs.com)
+npm login
+
+# 2. Make sure the name is free / you own it
+npm view pageonmobile version   # 404 = available
+
+# 3. Bump the version (commit + git tag)
+npm version patch               # or: minor / major
+
+# 4. Preview exactly what will be published
+npm publish --dry-run
+
+# 5. Publish (public registry)
+npm publish --access public
+```
+
+Notes:
+
+- If `pageonmobile` is already taken on npm, publish under a scope you own —
+  set `"name": "@exphoenee/pageonmobile"` in `package.json` (scoped packages
+  still need `--access public` to be free/public).
+- `prepublishOnly` runs `npm run build:lib`; verify `npm publish --dry-run`
+  lists `lib/*` and `media/device/*.webp` and nothing else.
+- Consumers install with `npm install pageonmobile` and use it as shown in
+  [Usage](#usage-as-a-package).
 
 ## License
 

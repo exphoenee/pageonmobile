@@ -112,8 +112,10 @@ export class Device {
 
     this.ctx.drawImage(frame, 0, 0);
 
-    this.animator = new ScrollAnimator(maxScroll, this.init.scrollSpeed, (pos) =>
-      this.draw(pos),
+    this.animator = new ScrollAnimator(
+      maxScroll,
+      this.init.scrollSpeed,
+      (pos) => this.draw(pos),
     );
     this.animator.paused = this.init.stopped;
     this.attachBehaviour();
