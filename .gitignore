@@ -4,3 +4,4 @@ lib/
 *.tgz
 *.local
 .DS_Store
+.npmrc
